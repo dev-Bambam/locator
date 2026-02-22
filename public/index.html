@@ -1,48 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Geolocation</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .value {
+            color: #111;
+        }
+
+        .error {
+            margin-top: 15px;
+            color: #d93025;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .accuracy {
+            color: #0a8f08;
+        }
+    </style>
 </head>
+
 <body>
-    <p>latitude: <span id="latitude"></span></p>
-    <p>longitude: <span id="longitude"></span></p>
-    <p>accuracy: <span id="accuracy"></span></p>
-    <hr>
-    <p>error: <span id="error"></span></p>
+
+    <div class="card">
+        <h2>📍 Your Location</h2>
+
+        <div class="info">
+            <span class="label">Latitude</span>
+            <span class="value" id="latitude">--</span>
+        </div>
+
+        <div class="info">
+            <span class="label">Longitude</span>
+            <span class="value" id="longitude">--</span>
+        </div>
+
+        <div class="info">
+            <span class="label">Accuracy</span>
+            <span class="value accuracy" id="accuracy">--</span>
+        </div>
+
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        const latElement = document.getElementById('latitude')
+        const longElement = document.getElementById('longitude')
+        const accuracyElement = document.getElementById('accuracy')
+        const errorElement = document.getElementById('error')
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    latElement.textContent = pos.coords.latitude.toFixed(6)
+                    longElement.textContent = pos.coords.longitude.toFixed(6)
+                    accuracyElement.textContent = pos.coords.accuracy + " meters"
+                },
+                (error) => {
+                    errorElement.textContent = error.message
+                },
+                { enableHighAccuracy: true }
+            )
+        } else {
+            errorElement.textContent = "Geolocation not supported"
+        }
+    </script>
+
 </body>
 
-<script>
-    const latElement = document.getElementById('latitude')
-    const longElement = document.getElementById('longitude')
-    const accuracyElement = document.getElementById('accuracy')
-    const errorElement = document.getElementById('error')
-
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(
-            (pos)=>{
-                const lat = pos.coords.latitude
-                const long = pos.coords.longitude
-                const accuracy = pos.coords.accuracy
-
-                latElement.innerHTML = lat
-                longElement.innerHTML = long
-                accuracyElement.innerHTML = accuracy
-
-                console.log(`lat: ${lat}\nlong:${long}\naccuracy:${accuracy}`)
-            },
-            (error) =>{
-                const errorMessage = `${error.message}`
-                errorElement.innerHTML = errorMessage
-
-                console.log(`Geolocation error:${errorMessage}`)
-            },
-            {enableHighAccuracy: true}
-        )
-    } else{
-        alert('Geolocation not supported')
-    }
-
-</script>
 </html>
