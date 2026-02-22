@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>latitude: <span id="latitude"></span></p>
+    <p>longitude: <span id="longitude"></span></p>
+    <p>accuracy: <span id="accuracy"></span></p>
+    <hr>
+    <p>error: <span id="error"></span></p>
+</body>
+
+<script>
+    const latElement = document.getElementById('latitude')
+    const longElement = document.getElementById('longitude')
+    const accuracyElement = document.getElementById('accuracy')
+    const errorElement = document.getElementById('error')
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+            (pos)=>{
+                const lat = pos.coords.latitude
+                const long = pos.coords.longitude
+                const accuracy = pos.coords.accuracy
+
+                latElement.innerHTML = lat
+                longElement.innerHTML = long
+                accuracyElement.innerHTML = accuracy
+
+                console.log(`lat: ${lat}\nlong:${long}\naccuracy:${accuracy}`)
+            },
+            (error) =>{
+                const errorMessage = `${error.message}`
+                errorElement.innerHTML = errorMessage
+
+                console.log(`Geolocation error:${errorMessage}`)
+            },
+            {enableHighAccuracy: true}
+        )
+    } else{
+        alert('Geolocation not supported')
+    }
+
+</script>
+</html>
