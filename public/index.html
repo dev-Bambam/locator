@@ -58,6 +58,17 @@
         .accuracy {
             color: #0a8f08;
         }
+        .location-btn{
+            margin-top: 20px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #4facfe;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 
@@ -81,6 +92,8 @@
             <span class="value accuracy" id="accuracy">--</span>
         </div>
 
+        <button type="button" id="location-btn" class="location-btn">Allow Location</button>
+
         <div class="error" id="error"></div>
     </div>
 
@@ -89,22 +102,25 @@
         const longElement = document.getElementById('longitude')
         const accuracyElement = document.getElementById('accuracy')
         const errorElement = document.getElementById('error')
+        const locationBtn = document.getElementById('location-btn')
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    latElement.textContent = pos.coords.latitude.toFixed(6)
-                    longElement.textContent = pos.coords.longitude.toFixed(6)
-                    accuracyElement.textContent = pos.coords.accuracy + " meters"
-                },
-                (error) => {
-                    errorElement.textContent = error.message
-                },
-                { enableHighAccuracy: true }
-            )
-        } else {
-            errorElement.textContent = "Geolocation not supported"
-        }
+        locationBtn.addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            latElement.textContent = pos.coords.latitude.toFixed(6)
+                            longElement.textContent = pos.coords.longitude.toFixed(6)
+                            accuracyElement.textContent = pos.coords.accuracy + " meters"
+                        },
+                        (error) => {
+                            errorElement.textContent = error.message
+                        },
+                        { enableHighAccuracy: true }
+                    )
+                } else {
+                    errorElement.textContent = "Geolocation not supported"
+                }
+        })
     </script>
 
 </body>
